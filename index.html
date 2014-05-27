@@ -149,7 +149,6 @@
             {name: "Internet International Visits (ten thousand people) 國際互聯網上網人數(萬人)", id: "internet_int", key: "INTERNET_INTERNATIONAL_VISITS%d"},
             {name: "Population (ten thousand people) 年末常住人口(万人)", id: "pop", key: "POP_%d"},
             {name: "GDP (Gross Domestic Production) 地区生产总值(亿元)", id: "gdp", key: "GDP_%d"},
-            {name: "GDP 地区生产总值(亿元)", id: "residual", key: "RESIDUAL%d", format: "+,"},
             //{name: "Birth Rate", id: "birthrate", key: "RBIRTH%d", years: [2011], format: percent},
             //{name: "Death Rate", id: "deathrate", key: "RDEATH%d", years: [2011], format: percent},
             //{name: "Natural Increase Rate", id: "natincrate", key: "RNATURALINC%d", years: [2011], format: percent},
@@ -236,11 +235,11 @@
 
       var segmentized = location.search === "?segmentized",
           url = ["data",
-            segmentized ? "CHN_adm1.geojson" : "CHN_adm1.geojson"  //"us-states-segmentized.topojson" : "us-states.topojson"
+            segmentized ? "CHN_adm1.topojson" : "CHN_adm1.topojson"  //"us-states-segmentized.topojson" : "us-states.topojson"
           ].join("/");
       d3.json(url, function(topo) {
         topology = topo;
-        geometries = topology.objects.states.geometries;
+        geometries = topology.objects.collection.geometries;  //collection... json file data format needs to be considred: state-> province or collection
         d3.csv("data/CHN_time_series.csv", function(data) {
           rawData = data;
           dataById = d3.nest()
@@ -256,7 +255,7 @@
             path = d3.geo.path()
               .projection(proj);
 
-        states = states.data(features)
+        states = states.data(features)			
           .enter()
           .append("path")
             .attr("class", "state")
