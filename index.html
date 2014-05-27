@@ -144,25 +144,17 @@
           })(),
           fields = [
             {name: "(no scale)", id: "none"},
-            // {name: "Census Population", id: "censuspop", key: "CENSUS%dPOP", years: [2010]},
-            // {name: "Estimate Base", id: "censuspop", key: "ESTIMATESBASE%d", years: [2010]},
-            {name: "Population Estimate", id: "popest", key: "POPESTIMATE%d"},
-            {name: "Population Change", id: "popchange", key: "NPOPCHG_%d", format: "+,"},
-            {name: "Births", id: "births", key: "BIRTHS%d"},
-            {name: "Deaths", id: "deaths", key: "DEATHS%d"},
-            {name: "Natural Increase", id: "natinc", key: "NATURALINC%d", format: "+,"},
-            {name: "Int'l Migration", id: "intlmig", key: "INTERNATIONALMIG%d", format: "+,"},
-            {name: "Domestic Migration", id: "domesticmig", key: "DOMESTICMIG%d", format: "+,"},
-            {name: "Net Migration", id: "netmig", key: "NETMIG%d", format: "+,"},
-            {name: "Residual", id: "residual", key: "RESIDUAL%d", format: "+,"},
-            {name: "Birth Rate", id: "birthrate", key: "RBIRTH%d", years: [2011], format: percent},
-            {name: "Death Rate", id: "deathrate", key: "RDEATH%d", years: [2011], format: percent},
-            {name: "Natural Increase Rate", id: "natincrate", key: "RNATURALINC%d", years: [2011], format: percent},
-            {name: "Int'l Migration Rate", id: "intlmigrate", key: "RINTERNATIONALMIG%d", years: [2011], format: percent},
-            {name: "Net Domestic Migration Rate", id: "domesticmigrate", key: "RDOMESTICMIG%d", years: [2011], format: percent},
-            {name: "Net Migration Rate", id: "netmigrate", key: "RNETMIG%d", years: [2011], format: percent},
+            {name: "Internet Population 互聯網用戶人口", id: "pop_internet", key: "POP_INTERNET%d"},
+            {name: "Internet Penetration Rate 互聯網普及率", id: "pop_internet_rate", key: "POP_INTERNET_RATE%d", format: percent},
+            {name: "Internet International Visits (ten thousand people) 國際互聯網上網人數(萬人)", id: "internet_int", key: "INTERNET_INTERNATIONAL_VISITS%d"},
+            {name: "Population (ten thousand people) 年末常住人口(万人)", id: "pop", key: "POP_%d"},
+            {name: "GDP (Gross Domestic Production) 地区生产总值(亿元)", id: "gdp", key: "GDP_%d"},
+            {name: "GDP 地区生产总值(亿元)", id: "residual", key: "RESIDUAL%d", format: "+,"},
+            //{name: "Birth Rate", id: "birthrate", key: "RBIRTH%d", years: [2011], format: percent},
+            //{name: "Death Rate", id: "deathrate", key: "RDEATH%d", years: [2011], format: percent},
+            //{name: "Natural Increase Rate", id: "natincrate", key: "RNATURALINC%d", years: [2011], format: percent},
           ],
-          years = [2010, 2011],
+          years = [2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003],
           fieldsById = d3.nest()
             .key(function(d) { return d.id; })
             .rollup(function(d) { return d[0]; })
@@ -244,12 +236,12 @@
 
       var segmentized = location.search === "?segmentized",
           url = ["data",
-            segmentized ? "us-states-segmentized.topojson" : "us-states.topojson"
+            segmentized ? "CHN_adm1.geojson" : "CHN_adm1.geojson"  //"us-states-segmentized.topojson" : "us-states.topojson"
           ].join("/");
       d3.json(url, function(topo) {
         topology = topo;
         geometries = topology.objects.states.geometries;
-        d3.csv("data/nst_2011.csv", function(data) {
+        d3.csv("data/CHN_time_series.csv", function(data) {
           rawData = data;
           dataById = d3.nest()
             .key(function(d) { return d.NAME; })
