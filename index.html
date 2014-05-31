@@ -196,10 +196,6 @@
 
       var map = d3.select("#map"),
           zoom = d3.behavior.zoom()
-            .translate([-38, 32])
-            .scale(.94)
-            .scaleExtent([0.5, 10.0])
-            .on("zoom", updateZoom),
           layer = map.append("g")
             .attr("id", "layer"),
           states = layer.append("g")
@@ -216,7 +212,13 @@
           "scale(" + [scale, scale] + ")");
       }
 
-      var proj = d3.geo.mercator(),
+	  var width = 960,
+			height = 480;
+
+      var proj = d3.geo.equirectangular()
+		  .scale(640)
+		  .translate([width / 2, height / 2])
+		  .precision(.1) ,
           topology,
           geometries,
           rawData,
@@ -255,6 +257,8 @@
         var features = carto.features(topology, geometries),
             path = d3.geo.path()
               .projection(proj);
+			//proj.rotate([45,170,-180]);
+			proj.center([114,33]);
 
         states = states.data(features)			
           .enter()

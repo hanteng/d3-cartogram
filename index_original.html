@@ -205,7 +205,7 @@
       var map = d3.select("#map"),
           zoom = d3.behavior.zoom()
             .translate([-38, 32])	//[-38, 32]
-            .scale(.34) 					//.94
+            .scale(.94) 					//.94
             .scaleExtent([0.5, 10.0])
             .on("zoom", updateZoom),
           layer = map.append("g")
