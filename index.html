@@ -215,7 +215,7 @@
           "scale(" + [scale, scale] + ")");
       }
 
-      var proj = d3.geo.albersUsa(),
+      var proj = d3.geo.mercator(),
           topology,
           geometries,
           rawData,
@@ -243,7 +243,7 @@
         d3.csv("data/CHN_time_series.csv", function(data) {
           rawData = data;
           dataById = d3.nest()
-            .key(function(d) { return d.NAME; })
+            .key(function(d) { return d.NAME_en; })
             .rollup(function(d) { return d[0]; })
             .map(data);
           init();
@@ -255,7 +255,7 @@
             path = d3.geo.path()
               .projection(proj);
 
-        states = states.data(features)			
+        CHN_adm1 = CHN_adm1.data(features)			
           .enter()
           .append("path")
             .attr("class", "state")
@@ -265,7 +265,7 @@
             .attr("fill", "#fafafa")
             .attr("d", path);
 
-        states.append("title");
+        CHN_adm1.append("title");
 
         parseHash();
       }
