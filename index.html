@@ -179,7 +179,7 @@
         .enter()
         .append("option")
           .attr("value", function(d) { return d.id; })
-          .text(function(d) { return d.name; });
+          .text(function(d) { return d.name; });			//names of fileds
 
       var yearSelect = d3.select("#year")
         .on("change", function(e) {
@@ -244,7 +244,7 @@
         d3.csv("data/CHN_time_series.csv", function(data) {
           rawData = data;
           dataById = d3.nest()
-            .key(function(d) { return d.NAME; })
+            .key(function(d) { return d.NAME_en; })					//names of states
             .rollup(function(d) { return d[0]; })
             .map(data);
           init();
