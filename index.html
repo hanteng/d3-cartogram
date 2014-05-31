@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Cartograms with d3 &amp; TopoJSON</title>
+    <title>Interactive cartograms of mainland Chinese statstics using d3 &amp; TopoJSON</title>
     <meta charset="utf-8">
 	<meta content="utf-8" http-equiv="encoding">  
     <meta property="og:image" content="placeholder.png">
@@ -91,7 +91,7 @@
   </head>
   <body>
     <div id="container">
-      <h1>Cartograms with d3 &amp; TopoJSON</h1>
+      <h3>Interactive cartograms of mainland Chinese statstics using d3 &amp; TopoJSON</h3>
       <form>
         <p>
           <label>Scale by <select id="field"></select></label>
@@ -104,30 +104,22 @@
         <svg id="map"></svg>
       </div>
       <div id="about">
-        <h2>About</h2>
-        <p><a href="cartogram.js">cartogram.js</a> is a JavaScript implementation of
-        <a href="http://lambert.nico.free.fr/tp/biblio/Dougeniketal1985.pdf">an algoritm to construct continuous area cartograms</a>,
-        by James A. Dougenik, Nicholas R. Chrisman and Duane R. Niemeyer,
-        &copy;1985 by the Association of American Geographers. This example combines
-        <a href="http://github.com/mbostock/topojson">TopoJSON</a>-encoded 
-        boundaries of the United States from
-        <a href="http://www.naturalearthdata.com/downloads/110m-cultural-vectors/">Natural Earth</a>
-        with
-        <a href="http://www.census.gov/popest/data/state/totals/2011/">2011 US Census population estimates</a>
-        to size each state proportionally.</p>
-        
-        <p>There&rsquo;s also a
-        <a class="hashish" href="?segmentized">segmentized topology</a>,
-        which distorts the shapes more fluidly than the
-        <a class="hashish" href="?">original</a>.</p>
-
-        <p>Designed and built by <a href="http://stamen.com/studio/shawn">Shawn Allen</a> at
-        <a href="http://stamen.com">Stamen</a>. But
-        <a href="http://d3js.org">d3.js</a> does most of the heavy lifting;
-        colors by <a href="http://colorbrewer2.org">colorbrewer</a>.</p>
+        <h3>About</h3>
+		<p>These interactive cartograms allow analysts to explore mainland Chinese statstics.</p>
+		<p>Analysts can better compare regional differences with cartograms, and because most of the indicators have time-series data points that cover many years, analysts can also explore historical changes by choosing different years.</p>
+		
+        <h4>About the data</h4>
+		<p>Most of the indicators are downloaded from <a href="http://stats.gov.cn/">China’s National Bureau of Statistics</a> (for more, read <a href="http://people.oii.ox.ac.uk/hanteng/2014/05/30/chinas-stats-gov-cn-goes-for-more-open-and-big-data/">my earlier blog post: China’s stats.gov.cn goes for “more open and big data”</a> ). </p>
+		
+		<p>The derived indicators of (i) per population and (i) per GDP are designed for <a href="http://www.gsd.harvard.edu/gis/manual/normalize/">geographic normalization</a> so as to allow analysts to compare per size outcomes, which can be viewed as *denisty* measurements.</p>
+		
+		<p>The data of Internet Population and Internet penetration rates, are derived from several <a href="http://www1.cnnic.cn/index.htm"> Statistical Report[s] on Internet Development in China</a>, as part of my DPhil work to understand the <a href="http://people.oii.ox.ac.uk/hanteng/2013/04/12/block-then-diffusion-a-hypothesis-for-the-internet-development-in-china/">"block-then-difussion patterns" </a>. Since such data does not seem to be available openly on the website of China’s National Bureau of Statistics, I have begun to release the data here: http://goo.gl/qzGxWV.  Also, my DPhil work includes East Asian data points for further comparisons, as shown by <a href="http://people.oii.ox.ac.uk/hanteng/2013/04/08/internet-penetration-rates-in-east-asian-and-chinese-regions-1995-2012/">the animated visualiazation of Internet Penetration Rates in East Asian and Chinese Regions 1995-2012</a>.</p>
+		
+        <h4>About the tools</h4>
+		<p><a href="https://github.com/shawnbot/d3-cartogram/">Cartogram.js</a>(designed and built by <a href="http://stamen.com/studio/shawn">Shawn Allen</a> at <a href="http://stamen.com">Stamen</a> on the foundation of <a href="http://d3js.org">d3.js</a>) implements of <a href="http://lambert.nico.free.fr/tp/biblio/Dougeniketal1985.pdf">an algoritm</a> to construct <a href="http://en.wikipedia.org/wiki/Cartogram">continuous area cartograms</a>, by James A. Dougenik, Nicholas R. Chrisman and Duane R. Niemeyer, &copy;1985 by the Association of American Geographers. This example combines <a href="http://github.com/mbostock/topojson">TopoJSON</a>-encoded boundaries of the mainland China from <a href="http://www.gadm.org/download">Global Administrative Areas</a>.</p>
+	    
       </div>
 
-      <a href="https://github.com/shawnbot/d3-cartogram/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
     </div>
     <script>
 
@@ -149,7 +141,7 @@
             {name: "GDP (a hundred million) 生产总值(亿元)", id: "gdp", years: [2003,2004,2005,2006,2007,2008,2009,2010,2011,2012], key: "GDP_%d"},
             {name: "Internet Population 互聯網用戶人口", id: "pop_internet", years: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013], key: "POP_INTERNET%d"},
             {name: "Internet Penetration Rate 互聯網普及率", id: "pop_internet_rate", key: "POP_INTERNET_RATE%d", years: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013], format: percent},
-            {name: "Internet Penetration per GDP 互聯網用戶人口/GDP", id: "pop_internet_pGDP", key: "POP_INTERNET_pGDP%d", years: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013]},
+            {name: "Internet Population per GDP 互聯網用戶人口/GDP", id: "pop_internet_pGDP", key: "POP_INTERNET_pGDP%d", years: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013]},
             {name: "Internet International Visits (ten thousand people) 國際互聯網上網人數(萬人)", id: "internet_int", years: [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012], key: "INTERNET_INTERNATIONAL_VISITS%d"},
             {name: "Publishers 出版物发行机构数", id: "PUBLISHERS", years: [2010,2011,2012], key: "PUBLISHERS%d"},
             {name: "Publishers 出版物发行机构数/人口", id: "PUBLISHERS_pPOP", years: [2010,2011,2012], key: "PUBLISHERS_pPOP%d"},
