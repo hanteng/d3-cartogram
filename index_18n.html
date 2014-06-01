@@ -91,7 +91,10 @@
   </head>
   <body>
     <div id="container">
-      <h1>Cartograms with d3 &amp; TopoJSON</h1>
+        <div style="float: right;">
+          <label>Language <select id="locale"></select></label>
+        </div>
+      <h3>Cartograms with d3 &amp; TopoJSON</h3>
       <form>
         <p>
           <label>Scale by <select id="field"></select></label>
@@ -143,6 +146,11 @@
             var fmt = d3.format(".2f");
             return function(n) { return fmt(n) + "%"; };
           })(),
+		  locales= [
+			{name: "English", id: "en"},
+			{name: "汉语", id: "zh-CN"},
+			{name: "漢語", id: "zh-TW"},
+		  ],
           fields = [
             {name: "Internet Population 互聯網用戶人口", id: "pop_internet", years: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013], key: "POP_INTERNET%d"},
             {name: "Internet Penetration Rate 互聯網用戶人口普及率", id: "pop_internet_rate", key: "POP_INTERNET_RATE%d", years: [2004,2005,2006,2007,2008,2009,2010,2011,2012,2013], format: percent},
@@ -161,17 +169,24 @@
             .map(fields),
           field = fields[0],
           year = years[0],
+		  locale= locales[0],
           colors = colorbrewer.RdYlBu[3]
             .reverse()
             .map(function(rgb) { return d3.hsl(rgb); });
 
       var body = d3.select("body"),
           stat = d3.select("#status");
-
+		  
+      var localeSelect = d3.select("#locale")
+        .on("change", function(e) {
+          locale = locales[this.selectedIndex];
+          location.hash = "#" + [field.id, year, locale].join("/");
+        });
+	  
       var fieldSelect = d3.select("#field")
         .on("change", function(e) {
           field = fields[this.selectedIndex];
-          location.hash = "#" + [field.id, year].join("/");
+          location.hash = "#" + [field.id, year, locale].join("/");
         });
 
       fieldSelect.selectAll("option")
@@ -184,7 +199,7 @@
       var yearSelect = d3.select("#year")
         .on("change", function(e) {
           year = years[this.selectedIndex];
-          location.hash = "#" + [field.id, year].join("/");
+          location.hash = "#" + [field.id, year,locale].join("/");
         });
 
       yearSelect.selectAll("option")
@@ -193,6 +208,13 @@
         .append("option")
           .attr("value", function(y) { return y; })
           .text(function(y) { return y; })
+		  
+      localeSelect.selectAll("option")
+        .data(locales)
+        .enter()
+        .append("option")
+          .attr("value", function(y) { return y.id; })
+          .text(function(y) { return y.name; })		  
 
       var map = d3.select("#map"),
           zoom = d3.behavior.zoom()
@@ -375,7 +397,8 @@
       function parseHash() {
         var parts = location.hash.substr(1).split("/"),
             desiredFieldId = parts[0],
-            desiredYear = +parts[1];
+            desiredYear = +parts[1],
+			desiredLocaleId = parts[2];
 
         field = fieldsById[desiredFieldId] || fields[0];
         year = (years.indexOf(desiredYear) > -1) ? desiredYear : years[0];
@@ -407,7 +430,7 @@
             .attr("disabled", null);
 
           deferredUpdate();
-          location.replace("#" + [field.id, year].join("/"));
+          location.replace("#" + [field.id, year,locale].join("/"));
 
           hashish.attr("href", function(href) {
             return href + location.hash;
